@@ -23,6 +23,7 @@ namespace Infrastructure
 
             services.AddScoped<IPasswordService, PasswordService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IJwtTokenService, JwtTokenService>();
 
             return services;
         }

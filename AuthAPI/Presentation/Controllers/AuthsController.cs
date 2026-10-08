@@ -1,5 +1,5 @@
 ﻿using Application.Handlers.Auths.Commands;
-using Application.Handlers.Auths.DTOs;
+using Application.Handlers.Auths.DTOs.Requests;
 using Application.Handlers.Auths.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +28,13 @@ namespace Presentation.Controllers
         public async Task<IActionResult> Register(RequestRegisterUserDto dto)
         {
             var result = await this._mediator.Send(new RegisterUserCommand(dto));
+            return Ok(result);
+        }
+
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(RequestLoginDto dto)
+        {
+            var result = await this._mediator.Send(new LoginCommand(dto));
             return Ok(result);
         }
     }

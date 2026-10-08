@@ -1,7 +1,8 @@
-﻿namespace Application.Handlers.Auths.DTOs
+﻿namespace Application.DTOs.Services.Users
 {
-    public class RequestRegisterUserDto
+    public class UserInfoDto
     {
+        public required int Id { get; set; }
         public required string Username { get; set; }
         public required string Password { get; set; }
     }

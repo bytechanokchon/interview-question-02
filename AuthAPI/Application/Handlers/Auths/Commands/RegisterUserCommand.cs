@@ -1,5 +1,5 @@
 ﻿using Application.DTOs.Shareds;
-using Application.Handlers.Auths.DTOs;
+using Application.Handlers.Auths.DTOs.Requests;
 using Application.Interfaces.Services;
 using MediatR;
 

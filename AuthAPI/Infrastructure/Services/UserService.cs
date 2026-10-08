@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Persistences;
+﻿using Application.DTOs.Services.Users;
+using Application.Interfaces.Persistences;
 using Application.Interfaces.Services;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,19 @@ namespace Infrastructure.Services
             await this._context.Users.AddAsync(user);
 
             await this._context.SaveChangeAsync();
+        }
+
+        public async Task<UserInfoDto?> GetUserInfoByUsernameAsync(string username)
+        {
+            return await this._context.Users
+                .Where(x => x.Username == username)
+                .Select(x => new UserInfoDto()
+                {
+                    Id = x.Id,
+                    Username = x.Username,
+                    Password = x.Password
+                })
+                .FirstOrDefaultAsync();
         }
     }
 }

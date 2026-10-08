@@ -1,13 +1,47 @@
 using Application;
+using Application.DTOs.Settings;
 using Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+var jwtSettings = builder.Configuration
+    .GetSection("JwtSettings")
+    .Get<JwtSetting>()!;
 
+builder.Services.Configure<JwtSetting>(
+    builder.Configuration.GetSection("JwtSettings")
+);
+
+// Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddApplicationDependency();
 builder.Services.AddInfrastructureDependency(builder.Configuration);
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidIssuer = jwtSettings.Issuer,
+            ValidAudience = jwtSettings.Audience,
+
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(jwtSettings.Secret)
+            ),
+
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+builder.Services.AddAuthorization();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -26,6 +60,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
