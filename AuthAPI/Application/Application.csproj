@@ -11,9 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Handlers\Auths\Commands\" />
-    <Folder Include="Handlers\Auths\DTOs\" />
-    <Folder Include="Interfaces\" />
+    <Folder Include="Handlers\Auths\DTOs\Requests\" />
   </ItemGroup>
 
   <ItemGroup>
