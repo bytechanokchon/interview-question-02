@@ -1,4 +1,5 @@
 <div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+
   <div class="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
 
     <!-- Header -->
@@ -12,8 +13,10 @@
       </p>
     </div>
 
-    <!-- Register Form -->
-    <form class="space-y-5">
+    <form
+      [formGroup]="registerForm"
+      (ngSubmit)="onSubmit()"
+      class="space-y-5">
 
       <!-- Username -->
       <div>
@@ -26,12 +29,38 @@
         <input
           id="username"
           type="text"
+          formControlName="username"
           placeholder="กรอก Username"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg
+          class="w-full px-4 py-3 border rounded-lg
                  outline-none transition
                  focus:ring-2 focus:ring-blue-500
                  focus:border-blue-500"
+          [class.border-red-500]="username?.invalid && username?.touched"
+          [class.border-gray-300]="!username?.invalid || !username?.touched"
         />
+
+        <!-- Username validation -->
+        @if (username?.invalid && username?.touched) {
+
+          @if (username?.hasError('required')) {
+            <p class="mt-1 text-sm text-red-500">
+              กรุณากรอก Username
+            </p>
+          }
+
+          @if (username?.hasError('minlength')) {
+            <p class="mt-1 text-sm text-red-500">
+              Username ต้องมีอย่างน้อย 4 ตัวอักษร
+            </p>
+          }
+
+          @if (username?.hasError('maxlength')) {
+            <p class="mt-1 text-sm text-red-500">
+              Username ต้องไม่เกิน 20 ตัวอักษร
+            </p>
+          }
+
+        }
       </div>
 
       <!-- Password -->
@@ -45,12 +74,32 @@
         <input
           id="password"
           type="password"
+          formControlName="password"
           placeholder="กรอก Password"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg
+          class="w-full px-4 py-3 border rounded-lg
                  outline-none transition
                  focus:ring-2 focus:ring-blue-500
                  focus:border-blue-500"
+          [class.border-red-500]="password?.invalid && password?.touched"
+          [class.border-gray-300]="!password?.invalid || !password?.touched"
         />
+
+        <!-- Password validation -->
+        @if (password?.invalid && password?.touched) {
+
+          @if (password?.hasError('required')) {
+            <p class="mt-1 text-sm text-red-500">
+              กรุณากรอก Password
+            </p>
+          }
+
+          @if (password?.hasError('minlength')) {
+            <p class="mt-1 text-sm text-red-500">
+              Password ต้องมีอย่างน้อย 6 ตัวอักษร
+            </p>
+          }
+
+        }
       </div>
 
       <!-- Confirm Password -->
@@ -64,39 +113,61 @@
         <input
           id="confirmPassword"
           type="password"
+          formControlName="confirmPassword"
           placeholder="กรอก Password อีกครั้ง"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg
+          class="w-full px-4 py-3 border rounded-lg
                  outline-none transition
                  focus:ring-2 focus:ring-blue-500
                  focus:border-blue-500"
+          [class.border-red-500]="
+            confirmPassword?.invalid && confirmPassword?.touched
+          "
+          [class.border-gray-300]="
+            !confirmPassword?.invalid || !confirmPassword?.touched
+          "
         />
+
+        <!-- Confirm Password validation -->
+        @if (confirmPassword?.invalid && confirmPassword?.touched) {
+
+          @if (confirmPassword?.hasError('required')) {
+            <p class="mt-1 text-sm text-red-500">
+              กรุณายืนยัน Password
+            </p>
+          }
+
+        }
+
+        @if (
+          confirmPassword?.touched &&
+          registerForm.hasError('passwordMismatch')
+        ) {
+          <p class="mt-1 text-sm text-red-500">
+            Password ไม่ตรงกัน
+          </p>
+        }
+
       </div>
 
-      <!-- Register Button -->
+      <!-- Register -->
       <button
         type="submit"
+        [disabled]="registerForm.invalid"
         class="w-full py-3 bg-blue-600 text-white font-semibold
                rounded-lg transition
                hover:bg-blue-700
-               focus:outline-none
-               focus:ring-2
-               focus:ring-blue-500
-               focus:ring-offset-2">
+               disabled:bg-gray-400
+               disabled:cursor-not-allowed">
         Register
       </button>
 
       <!-- Back to Login -->
       <button
-        (click)="onClickGoToLoginPage()"
         type="button"
+        routerLink="/login"
         class="w-full py-3 border border-gray-300
                text-gray-700 font-semibold rounded-lg
-               transition
-               hover:bg-gray-100
-               focus:outline-none
-               focus:ring-2
-               focus:ring-gray-400
-               focus:ring-offset-2">
+               transition hover:bg-gray-100">
         Back to Login
       </button>
 
